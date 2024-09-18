@@ -1,0 +1,72 @@
+#### run postgres with age and pgvector
+
+docker run  -it \             
+    -p 5432:5432 \             
+    --name 'age-playground' \
+    age-pgvector
+
+
+docker exec -it 8f4eb961e6b30af5577e4f5b0c7de9fcbe3a7c77b306a025100a3060545661d8 bash
+
+#### run age-viewer
+
+docker run  -it -p 3000:3000 --name 'age-viewer' age-viewer
+
+host.docker.internal
+
+
+CREATE EXTENSION vector;
+
+CREATE EXTENSION IF NOT EXISTS age;
+LOAD 'age';
+SET search_path = ag_catalog, "$user", public;
+
+
+
+#### age
+######## create graph
+SELECT create_graph('graph_name');
+
+######## create node
+SELECT * 
+FROM cypher('drug', $$
+    CREATE (:drug {name:"pembrolizumab"})
+$$) as (v agtype);
+
+SELECT * 
+FROM cypher('drug', $$
+    CREATE (:drug {name:"keytruda"})
+$$) as (v agtype);
+
+######## create edge
+SELECT * 
+FROM cypher('drug', $$
+    MATCH (a:drug), (b:drug)
+    WHERE a.name = 'pembrolizumab' AND b.name = 'keytruda'
+    CREATE (a)-[e:HAS_INTERACTION {property:a.property + '<->' + b.property}]->(b)
+    RETURN e
+$$) as (e agtype);
+
+
+######## show nodes
+SELECT * from cypher('drug', $$
+        MATCH (V)-[R]-(V2)
+        RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);
+
+
+######## drop graph
+
+
+
+
+
+SELECT * FROM cypher('drug_disorder', $$
+        MATCH (V)-[R]-(V2)
+        RETURN V,R,V2 LIMIT 5
+$$) as (V agtype, R agtype, V2 agtype);
+
+
+SELECT * FROM cypher('drug_disorder', $$ MATCH (d:Drug) WHERE d.name = "pembrolizumab" RETURN d $$) as (d agtype);
+
+SELECT * FROM cypher('drug_disorder', $$ MATCH p=(d:Drug)-->(di:Disorder) WHERE d.name = "pembrolizumab" RETURN p $$) as (d agtype);

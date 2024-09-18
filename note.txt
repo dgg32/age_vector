@@ -1,0 +1,1 @@
+Can't bring embedding into graph with sql.SQL().format(): Composed elements must be Composable, got []
