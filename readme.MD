@@ -6,7 +6,7 @@
 
   
 
-This repository contains code and data for my article "[PostgreSQL Goes Multi-Model: Graph, Vector, and SQL](https://medium.com/@dgg32/clinical-trial-search-with-google-spanner-graph-sql-vector-and-llm-all-in-one-query-5ada29f840cd)".
+This repository contains code and data for my article "[PostgreSQL Goes Multi-Model: Graph, Vector, and SQL](https://dgg32.medium.com/postgresql-goes-multi-model-graph-vector-and-sql-5f27dbc04835)".
 
   
   
